@@ -26,15 +26,14 @@ export const useScaledBackground = (
 		const wrapper = getWrapper();
 		if (!wrapper) return;
 
-		console.log("latest", latest);
-		console.log(node);
-		console.log(wrapper);
 		const y = cssToPx(latest, node);
 		const scaleFromY = cssToPx(scaleFrom, node);
 		const multiplier = Math.max(
 			(-y - scaleFromY) / (cssToPx(lastPoint, node) - scaleFromY),
 			0,
 		);
+
+		console.log(y, scaleFromY, multiplier);
 
 		const width = (wrapper as HTMLElement).offsetWidth;
 

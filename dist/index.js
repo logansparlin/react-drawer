@@ -817,15 +817,13 @@ var useScaledBackground = (drawerControls, drawerRef, snapPoints, shouldScaleBac
     if (!node) return;
     const wrapper = getWrapper();
     if (!wrapper) return;
-    console.log("latest", latest);
-    console.log(node);
-    console.log(wrapper);
     const y = cssToPx(latest, node);
     const scaleFromY = cssToPx(scaleFrom, node);
     const multiplier = Math.max(
       (-y - scaleFromY) / (cssToPx(lastPoint, node) - scaleFromY),
       0
     );
+    console.log(y, scaleFromY, multiplier);
     const width = wrapper.offsetWidth;
     const transform = `scale(calc(1 - ((2 * var(--offset)) / ${width}) * ${multiplier})) translate3d(0, calc(env(safe-area-inset-top) + (var(--offset) * 1px) * ${multiplier}), 0)`;
     const borderRadius = `calc(var(--border-radius) * ${multiplier})`;
