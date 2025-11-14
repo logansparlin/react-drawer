@@ -26,6 +26,9 @@ export const useScaledBackground = (
 		const wrapper = getWrapper();
 		if (!wrapper) return;
 
+		console.log("latest", latest);
+		console.log(node);
+		console.log(wrapper);
 		const y = cssToPx(latest, node);
 		const scaleFromY = cssToPx(scaleFrom, node);
 		const multiplier = Math.max(
@@ -45,8 +48,6 @@ export const useScaledBackground = (
 	});
 
 	useValueChange(drawerControls.isDragging, (latest) => {
-		console.log("latest", latest);
-		console.log(getWrapper());
 		if (!shouldScaleBackground) return;
 
 		const wrapper = getWrapper();

@@ -794,6 +794,9 @@ var useScaledBackground = (drawerControls, drawerRef, snapPoints, shouldScaleBac
     if (!node) return;
     const wrapper = getWrapper();
     if (!wrapper) return;
+    console.log("latest", latest);
+    console.log(node);
+    console.log(wrapper);
     const y = cssToPx(latest, node);
     const scaleFromY = cssToPx(scaleFrom, node);
     const multiplier = Math.max(
@@ -806,8 +809,6 @@ var useScaledBackground = (drawerControls, drawerRef, snapPoints, shouldScaleBac
     setStyle(wrapper, { transform, borderRadius });
   });
   useValueChange(drawerControls.isDragging, (latest) => {
-    console.log("latest", latest);
-    console.log(getWrapper());
     if (!shouldScaleBackground) return;
     const wrapper = getWrapper();
     if (!wrapper) return;
