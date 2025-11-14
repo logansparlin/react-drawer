@@ -975,16 +975,6 @@ Scrollable.displayName = "Drawer.Scrollable";
 // src/drawer/snap-areas/ui/snap-areas.tsx
 import { forwardRef as forwardRef7 } from "react";
 
-// src/drawer/snap-areas/lib/constants.ts
-var COLORS = [
-  "#ef4444",
-  "#3b82f6",
-  "#cffafe",
-  "#84cc16",
-  "#8b5cf6",
-  "#f97316"
-];
-
 // src/drawer/snap-areas/lib/hooks/use-mounted.ts
 import { useEffect as useEffect6, useState as useState3 } from "react";
 var useMounted = () => {
@@ -1011,14 +1001,23 @@ var Areas = () => {
       "gv-drawer-area": "",
       style: {
         flexShrink: 0,
-        background: COLORS[index % COLORS.length],
-        opacity: 0.4,
+        opacity: 0,
         height
       }
     },
     index
   ));
 };
+
+// src/drawer/snap-areas/lib/constants.ts
+var COLORS = [
+  "#ef4444",
+  "#3b82f6",
+  "#cffafe",
+  "#84cc16",
+  "#8b5cf6",
+  "#f97316"
+];
 
 // src/drawer/snap-areas/ui/lines.tsx
 import { jsx as jsx12 } from "react/jsx-runtime";

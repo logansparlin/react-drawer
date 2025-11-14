@@ -28,8 +28,7 @@ export const Areas: FC = () => {
 			gv-drawer-area=""
 			style={{
 				flexShrink: 0,
-				background: COLORS[index % COLORS.length],
-				opacity: 0.4,
+				opacity: 0,
 				height,
 			}}
 		/>
