@@ -806,6 +806,8 @@ var useScaledBackground = (drawerControls, drawerRef, snapPoints, shouldScaleBac
     setStyle(wrapper, { transform, borderRadius });
   });
   useValueChange(drawerControls.isDragging, (latest) => {
+    console.log("latest", latest);
+    console.log(getWrapper());
     if (!shouldScaleBackground) return;
     const wrapper = getWrapper();
     if (!wrapper) return;
