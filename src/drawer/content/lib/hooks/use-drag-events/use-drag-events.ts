@@ -26,20 +26,21 @@ export const useDragEvents = ({
 	dismissible,
 	locked,
 }: DragEventsOptions) => {
-	const drawerRef = useRef<HTMLElement>(null);
+	const drawerRef = useRef<HTMLElement | null>(null);
 
 	const dismissablePoints = dismissible ? [0, ...snapPoints] : snapPoints;
 	const getSnap = useGetSnap(dismissablePoints, drawerRef);
 
 	const handleDragEnd: DragEventHandler = (_e, { velocity }) => {
-		const node = drawerRef.current;
+		const node = drawerRef?.current;
 		if (!node) return;
 
 		const rect = node.getBoundingClientRect();
 		const pos = window.innerHeight - rect.y;
 
 		// Definitely not undefined, because we checked the drawerRef.current earlier
-		const newSnap = getSnap(pos, locked.get() ? 0 : velocity)!;
+		const newSnap = getSnap(pos, locked.get() ? 0 : velocity);
+		if (!newSnap) return;
 
 		if (newSnap === 0) return onClose();
 

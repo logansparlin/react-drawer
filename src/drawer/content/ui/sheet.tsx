@@ -40,7 +40,7 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(
 
 		const snapTo = useSnapTo(drawerControls.y);
 
-		const { drawerRef, listeners } = useDragEvents<HTMLDivElement>({
+		const { drawerRef, listeners } = useDragEvents({
 			snapPoints,
 			snapTo,
 			snap,

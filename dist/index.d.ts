@@ -2,8 +2,8 @@ import * as _radix_ui_react_dialog from '@radix-ui/react-dialog';
 import { DialogOverlayProps, DialogPortalProps, DialogContentProps } from '@radix-ui/react-dialog';
 export { Close as DrawerClose, DialogCloseProps as DrawerCloseProps, Description as DrawerDescription, DialogDescriptionProps as DrawerDescriptionProps, Title as DrawerTitle, DialogTitleProps as DrawerTitleProps, Trigger as DrawerTrigger, DialogTriggerProps as DrawerTriggerProps } from '@radix-ui/react-dialog';
 import * as react from 'react';
-import react__default, { PointerEvent, FC, PropsWithChildren } from 'react';
-import { ComponentPropsWithoutRef, Primitive } from '@radix-ui/react-primitive';
+import { PointerEvent, FC, PropsWithChildren } from 'react';
+import { Primitive } from '@radix-ui/react-primitive';
 
 type Without<T, K extends keyof any> = Omit<T, K> & {
     [P in K]?: never;
@@ -43,7 +43,7 @@ interface DragInfo {
     velocity: number;
 }
 type DragEventHandler<T = Element> = (event: PointerEvent<T>, info: DragInfo) => void;
-type ConstraintEventHandler<T = Element> = (event: PointerEvent<T>, type: ConstraintType) => void | boolean;
+type ConstraintEventHandler<T = Element> = (event: PointerEvent<T>, type: ConstraintType) => void;
 
 interface DragProps<T> {
     dragControls?: DragControls<T>;
@@ -55,13 +55,13 @@ interface DragProps<T> {
     transformTemplate?: TransformTemplate;
     scrollLockTimeout?: number;
 }
-type PrimitiveDivProps<T> = Omit<ComponentPropsWithoutRef<typeof Primitive.div>, keyof DragProps<T>>;
+type PrimitiveDivProps<T> = Omit<React.ComponentPropsWithoutRef<typeof Primitive.div>, keyof DragProps<T>>;
 interface DraggableProps<T> extends PrimitiveDivProps<T>, DragProps<T> {
 }
 
 interface ScrollableProps extends DraggableProps<number> {
 }
-declare const Scrollable: react__default.ForwardRefExoticComponent<ScrollableProps & react__default.RefAttributes<HTMLDivElement>>;
+declare const Scrollable: react.ForwardRefExoticComponent<ScrollableProps & react.RefAttributes<HTMLDivElement>>;
 
 type OnOpenChange = (open: boolean) => void;
 type Snap = number | string;
@@ -79,7 +79,7 @@ type OverlayProps = DialogOverlayProps & (WithRadixPrimitiveProps | WithCustomPr
     fadeFrom?: Snap;
     finalOpacity?: number;
 };
-declare const Overlay: react__default.ForwardRefExoticComponent<OverlayProps & react__default.RefAttributes<HTMLDivElement>>;
+declare const Overlay: react.ForwardRefExoticComponent<OverlayProps & react.RefAttributes<HTMLDivElement>>;
 
 interface PortalProps extends DialogPortalProps {
 }
@@ -90,18 +90,18 @@ interface SheetProps extends DraggableProps<Snap> {
 
 interface ContentProps extends Omit<DialogContentProps, keyof SheetProps>, SheetProps {
 }
-declare const Content: react__default.ForwardRefExoticComponent<ContentProps & react__default.RefAttributes<HTMLDivElement>>;
+declare const Content: react.ForwardRefExoticComponent<ContentProps & react.RefAttributes<HTMLDivElement>>;
 
 type OpenProps = WithoutThisOrThat<{
     defaultOpen?: boolean;
     open: boolean;
     onOpenChange: OnOpenChange;
-}, 'defaultOpen', 'open' | 'onOpenChange'>;
+}, "defaultOpen", "open" | "onOpenChange">;
 type SnapProps = WithoutThisOrThat<{
     snapPoints?: Snap[];
     snap: Snap;
     setSnap: SetSnap;
-}, '', 'snap' | 'setSnap'>;
+}, "", "snap" | "setSnap">;
 interface WithScaledBackground {
     scaleFrom?: Snap;
     shouldScaleBackground: true;
@@ -117,14 +117,14 @@ type RootProps = PropsWithChildren & OpenProps & SnapProps & {
 } & (WithScaledBackground | WithoutScaledBackground);
 declare const Root: FC<RootProps>;
 
-declare const SnapAreas: react__default.ForwardRefExoticComponent<react__default.RefAttributes<HTMLDivElement>>;
+declare const SnapAreas: react.ForwardRefExoticComponent<Omit<react.DetailedHTMLProps<react.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & react.RefAttributes<HTMLDivElement>>;
 
 declare const Drawer: {
     Root: react.FC<RootProps>;
     Content: react.ForwardRefExoticComponent<ContentProps & react.RefAttributes<HTMLDivElement>>;
     Portal: react.FC<PortalProps>;
     Overlay: react.ForwardRefExoticComponent<OverlayProps & react.RefAttributes<HTMLDivElement>>;
-    SnapAreas: react.ForwardRefExoticComponent<react.RefAttributes<HTMLDivElement>>;
+    SnapAreas: react.ForwardRefExoticComponent<Omit<react.DetailedHTMLProps<react.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & react.RefAttributes<HTMLDivElement>>;
     Scrollable: react.ForwardRefExoticComponent<ScrollableProps & react.RefAttributes<HTMLDivElement>>;
     Trigger: react.ForwardRefExoticComponent<_radix_ui_react_dialog.DialogTriggerProps & react.RefAttributes<HTMLButtonElement>>;
     Close: react.ForwardRefExoticComponent<_radix_ui_react_dialog.DialogCloseProps & react.RefAttributes<HTMLButtonElement>>;

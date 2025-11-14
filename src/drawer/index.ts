@@ -1,12 +1,13 @@
 import { Close, Description, Title, Trigger } from "@radix-ui/react-dialog";
 
 import { Content } from "./content";
-import "./index.css";
 import { Overlay } from "./overlay";
 import { Portal } from "./portal";
 import { Root } from "./root";
 import { Scrollable } from "./scrollable";
 import { SnapAreas } from "./snap-areas";
+
+import "./index.css";
 
 export type { Snap } from "./lib/types";
 export type { RootProps as DrawerRootProps } from "./root";

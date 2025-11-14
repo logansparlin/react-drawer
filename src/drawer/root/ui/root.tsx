@@ -69,8 +69,8 @@ export const Root: FC<RootProps> = ({
 	const [open, onOpenChange] = useOpenState(defaultOpen, cOpen, cOnOpenChange);
 	const [snap, setSnap] = useSnapState(snapPoints[0], cSnap, cSetSnap);
 
-	const drawerRef = useRef<HTMLDivElement>(null);
-	const scrollableRef = useRef<HTMLDivElement>(null);
+	const drawerRef = useRef<HTMLDivElement | null>(null);
+	const scrollableRef = useRef<HTMLDivElement | null>(null);
 
 	const constraintHandlers = useConstraintEvents(
 		drawerRef,

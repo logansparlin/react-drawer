@@ -8,7 +8,7 @@ import type { DragControls } from "@/shared/ui/draggable";
 
 export const useScaledBackground = (
 	drawerControls: DragControls<Snap>,
-	drawerRef: RefObject<HTMLDivElement>,
+	drawerRef: RefObject<HTMLDivElement | null>,
 	snapPoints: Snap[],
 	shouldScaleBackground: boolean,
 	scaleFrom: Snap,

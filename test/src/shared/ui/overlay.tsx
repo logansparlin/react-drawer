@@ -1,3 +1,5 @@
+"use client";
+
 import { type FC, forwardRef } from "react";
 
 import { DrawerOverlay, type DrawerOverlayProps } from "@gv/drawer";

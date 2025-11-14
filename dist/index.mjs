@@ -4,7 +4,7 @@
 import { Close, Description, Title, Trigger } from "@radix-ui/react-dialog";
 
 // src/drawer/content/ui/content.tsx
-import React5, { forwardRef as forwardRef3 } from "react";
+import { forwardRef as forwardRef3 } from "react";
 import {
   Content as ContentPrimitive
 } from "@radix-ui/react-dialog";
@@ -13,19 +13,21 @@ import {
 import { useContext } from "react";
 
 // src/drawer/lib/providers/drawer-context.tsx
-import React, {
+import {
   createContext
 } from "react";
+import { jsx } from "react/jsx-runtime";
 var DrawerContext = createContext(null);
-var DrawerContextProvider = (props) => /* @__PURE__ */ React.createElement(DrawerContext.Provider, { ...props });
+var DrawerContextProvider = (props) => /* @__PURE__ */ jsx(DrawerContext.Provider, { ...props });
 
 // src/drawer/lib/providers/portal-context.tsx
-import React2, { createContext as createContext2 } from "react";
+import { createContext as createContext2 } from "react";
+import { jsx as jsx2 } from "react/jsx-runtime";
 var PortalContext = createContext2(void 0);
 var PortalContextProvider = ({
   forceMount,
   ...props
-}) => /* @__PURE__ */ React2.createElement(PortalContext.Provider, { value: forceMount, ...props });
+}) => /* @__PURE__ */ jsx2(PortalContext.Provider, { value: forceMount, ...props });
 
 // src/drawer/lib/hooks/use-drawer-context.ts
 var useDrawerContext = () => {
@@ -47,7 +49,7 @@ var usePortalContext = () => {
 };
 
 // src/drawer/content/ui/sheet.tsx
-import React4, { forwardRef as forwardRef2, useEffect as useEffect4 } from "react";
+import { forwardRef as forwardRef2, useEffect as useEffect4 } from "react";
 import { useComposedRefs as useComposedRefs2 } from "@radix-ui/react-compose-refs";
 
 // src/shared/lib/helpers.ts
@@ -55,7 +57,7 @@ var isNumber = (value) => typeof value === "number";
 var isFunction = (value) => typeof value === "function";
 var clamp = (min, max, value) => Math.min(max, Math.max(min, value));
 var mergeHandlers = (...handlers) => {
-  return (...args) => handlers.forEach((handler) => handler == null ? void 0 : handler(...args));
+  return (...args) => handlers.forEach((handler) => void (handler == null ? void 0 : handler(...args)));
 };
 var cache = /* @__PURE__ */ new WeakMap();
 var setStyle = (el, style) => {
@@ -72,7 +74,10 @@ var resetStyle = (el, prop) => {
   const original = cache.get(el);
   if (!original) return;
   const elStyle = el.style;
-  if (prop) return elStyle[prop] = original[prop];
+  if (prop) {
+    elStyle[prop] = original[prop];
+    return;
+  }
   Object.entries(original).forEach(([key, value]) => {
     elStyle[key] = value;
   });
@@ -87,7 +92,8 @@ var cssToPx = (value, el) => {
   if (!el) throw new Error("You have to provide element");
   const rect = el.getBoundingClientRect();
   if (isNumber(value)) return value;
-  if (value.match(PERCENT_REGEX)) return rect.height * parseFloat(value) / 100;
+  if (value.match(PERCENT_REGEX))
+    return rect.height * parseFloat(value) / 100;
   if (value.match(PX_REGEX)) return parseFloat(value);
   throw new Error("Unknown value units");
 };
@@ -110,7 +116,7 @@ var useValue = (initial) => {
   const key = useRef(0);
   const handlers = useRef(/* @__PURE__ */ new Map());
   const notify = () => {
-    handlers.current.forEach((handler) => handler(v.current));
+    handlers.current.forEach((handler) => void handler(v.current));
   };
   const set = (value) => {
     if (value === v.current) return;
@@ -139,18 +145,18 @@ var useValueChange = (value, handler) => {
     return () => {
       unsub();
     };
-  }, []);
+  }, [handler, value.subscribe]);
 };
 
 // src/shared/lib/hooks/use-set-style.ts
 var useSetStyle = (ref) => {
   const set = (style) => {
-    const el = ref.current;
+    const el = ref == null ? void 0 : ref.current;
     if (!el) return;
     setStyle(el, style);
   };
   const reset = (prop) => {
-    const el = ref.current;
+    const el = ref == null ? void 0 : ref.current;
     if (!el) return;
     resetStyle(el, prop);
   };
@@ -158,13 +164,11 @@ var useSetStyle = (ref) => {
 };
 
 // src/shared/ui/draggable/ui/draggable.tsx
-import React3, {
+import {
   forwardRef
 } from "react";
 import { useComposedRefs } from "@radix-ui/react-compose-refs";
-import {
-  Primitive
-} from "@radix-ui/react-primitive";
+import { Primitive } from "@radix-ui/react-primitive";
 
 // src/shared/ui/draggable/lib/helpers.ts
 var getConstraint = (c, el) => isFunction(c) ? c(el) : c;
@@ -178,7 +182,7 @@ var hasScrollOverflow = (el) => {
 var shouldDrag = (el, root, isDraggingDown, checkScroll) => {
   var _a;
   const selection = (_a = window.getSelection()) == null ? void 0 : _a.toString();
-  if (selection && selection.length) return false;
+  if (selection == null ? void 0 : selection.length) return false;
   if (!checkScroll) return true;
   let element = el;
   while (element) {
@@ -366,17 +370,20 @@ var useDraggable = ({
 };
 
 // src/shared/ui/draggable/lib/hooks/use-prevent-scroll.ts
-import { useEffect as useEffect2 } from "react";
+import { useCallback, useEffect as useEffect2 } from "react";
 var usePreventScroll = (isDragging) => {
-  const handleTouchMove = (e) => {
-    if (isDragging.get()) e.preventDefault();
-  };
+  const handleTouchMove = useCallback(
+    (e) => {
+      if (isDragging.get()) e.preventDefault();
+    },
+    [isDragging]
+  );
   useEffect2(() => {
     document.addEventListener("touchmove", handleTouchMove, { passive: false });
     return () => {
       document.removeEventListener("touchmove", handleTouchMove);
     };
-  }, []);
+  }, [handleTouchMove]);
 };
 
 // #style-inject:#style-inject
@@ -402,9 +409,10 @@ function styleInject(css, { insertAt } = {}) {
 }
 
 // src/shared/ui/draggable/ui/draggable.css
-styleInject("[vladyoslav-drawer-draggable] {\n}\n@media (hover: hover) and (pointer: fine) {\n  [vladyoslav-drawer-draggable] {\n    user-select: none;\n  }\n}\n");
+styleInject("[gv-drawer-draggable] {\n}\n@media (hover: hover) and (pointer: fine) {\n  [gv-drawer-draggable] {\n    user-select: none;\n  }\n}\n");
 
 // src/shared/ui/draggable/ui/draggable.tsx
+import { jsx as jsx3 } from "react/jsx-runtime";
 var _Draggable = ({
   constraints,
   dragControls: cDragControls,
@@ -443,10 +451,10 @@ var _Draggable = ({
     else resetStyle2("transition");
   });
   usePreventScroll(isDragging);
-  return /* @__PURE__ */ React3.createElement(
+  return /* @__PURE__ */ jsx3(
     Primitive.div,
     {
-      "vladyoslav-drawer-draggable": "",
+      "gv-drawer-draggable": "",
       draggable: "false",
       ref: composedRef,
       onPointerDown: mergeHandlers(handlePointerDown, onPointerDown),
@@ -478,7 +486,7 @@ import { useRef as useRef3 } from "react";
 // src/drawer/content/lib/hooks/use-drag-events/use-get-snap.ts
 var useGetSnap = (snapPoints, ref) => {
   return (pos, velocity) => {
-    if (ref.current === null) return;
+    if (!(ref == null ? void 0 : ref.current) || ref.current === null) return;
     const lastPoint = snapPoints[snapPoints.length - 1];
     const maxAddValue = cssToPx(lastPoint, ref.current);
     const posWithVelocity = pos + -(velocity / 7) * maxAddValue;
@@ -499,12 +507,13 @@ var useDragEvents = ({
   const drawerRef = useRef3(null);
   const dismissablePoints = dismissible ? [0, ...snapPoints] : snapPoints;
   const getSnap2 = useGetSnap(dismissablePoints, drawerRef);
-  const handleDragEnd = (e, { velocity }) => {
-    const node = drawerRef.current;
+  const handleDragEnd = (_e, { velocity }) => {
+    const node = drawerRef == null ? void 0 : drawerRef.current;
     if (!node) return;
     const rect = node.getBoundingClientRect();
     const pos = window.innerHeight - rect.y;
-    let newSnap = getSnap2(pos, locked.get() ? 0 : velocity);
+    const newSnap = getSnap2(pos, locked.get() ? 0 : velocity);
+    if (!newSnap) return;
     if (newSnap === 0) return onClose();
     setSnap(newSnap);
   };
@@ -524,7 +533,7 @@ var useSnapToCurrent = (snapTo, snap, open) => {
   return useEffect3(() => {
     if (open) snapTo(snap);
     else snapTo(0);
-  }, [open, snap]);
+  }, [open, snap, snapTo]);
 };
 
 // src/drawer/content/lib/hooks/use-snap-to.ts
@@ -533,6 +542,7 @@ var useSnapTo = (y) => {
 };
 
 // src/drawer/content/ui/sheet.tsx
+import { jsx as jsx4 } from "react/jsx-runtime";
 var Sheet = forwardRef2(
   ({ onConstraint, onPointerUp, onPointerCancel, onDragEnd, ...props }, forwardedRef) => {
     const {
@@ -566,8 +576,8 @@ var Sheet = forwardRef2(
     useEffect4(() => {
       if (open) resetStyle2("pointerEvents");
       else setStyle2({ pointerEvents: "none" });
-    }, [open]);
-    return /* @__PURE__ */ React4.createElement(
+    }, [open, resetStyle2, setStyle2]);
+    return /* @__PURE__ */ jsx4(
       Draggable,
       {
         ref: composedRef,
@@ -593,6 +603,7 @@ var Sheet = forwardRef2(
 Sheet.displayName = "Drawer.Sheet";
 
 // src/drawer/content/ui/content.tsx
+import { jsx as jsx5 } from "react/jsx-runtime";
 var Content = forwardRef3(
   ({
     onOpenAutoFocus,
@@ -610,13 +621,13 @@ var Content = forwardRef3(
       onPointerDownOutside,
       forceMount
     };
-    return /* @__PURE__ */ React5.createElement(
+    return /* @__PURE__ */ jsx5(
       ContentPrimitive,
       {
         ref,
         asChild: true,
         ...primitiveProps,
-        "vladyoslav-drawer": "",
+        "gv-drawer": "",
         onEscapeKeyDown: (e) => {
           if (drawerControls.isDragging.get()) return e.preventDefault();
           if (!dismissible) e.preventDefault();
@@ -625,19 +636,16 @@ var Content = forwardRef3(
         onInteractOutside: (e) => {
           if (!modal || !dismissible) e.preventDefault();
           onInteractOutside == null ? void 0 : onInteractOutside(e);
-        }
-      },
-      /* @__PURE__ */ React5.createElement(Sheet, { ...props })
+        },
+        children: /* @__PURE__ */ jsx5(Sheet, { ...props })
+      }
     );
   }
 );
 Content.displayName = "Drawer.Content";
 
-// src/drawer/index.css
-styleInject('[vladyoslav-drawer-overlay],\n[vladyoslav-drawer],\n[vladyoslav-drawer-scrollable],\n[vladyoslav-drawer-wrapper] {\n  --duration: 0.5s;\n  --timing-function: cubic-bezier(0.32, 0.72, 0, 1);\n  --scroll-bar-shift: var(--removed-body-scroll-bar-size, 0);\n}\n[vladyoslav-drawer-overlay] {\n  opacity: 0;\n  transition: opacity var(--duration) var(--timing-function);\n}\n[vladyoslav-drawer] {\n  transform: translate3d(0, 100%, 0);\n}\n[vladyoslav-drawer],\n[vladyoslav-drawer-scrollable] {\n  transition: transform var(--duration) var(--timing-function);\n}\n[vladyoslav-drawer-wrapper] {\n  --border-radius: 8px;\n  --offset: 14;\n  transform-origin: top center;\n  transition-property: transform, border-radius;\n  transition-duration: var(--duration);\n  transition-timing-function: var(--timing-function);\n}\n[vladyoslav-drawer]::after {\n  content: "";\n  position: absolute;\n  top: calc(100% - 1px);\n  background: inherit;\n  background-color: inherit;\n  left: 0;\n  right: 0;\n  height: 100%;\n  z-index: -1;\n}\n[vladyoslav-drawer-overlay][data-state=closed],\n[vladyoslav-drawer][data-state=closed] {\n  animation: fake-animation var(--duration) var(--timing-function);\n}\n@keyframes fake-animation {\n  from {\n  }\n  to {\n  }\n}\n');
-
 // src/drawer/overlay/ui/overlay.tsx
-import React7, { forwardRef as forwardRef5, useRef as useRef4 } from "react";
+import { forwardRef as forwardRef5, useRef as useRef4 } from "react";
 import { useComposedRefs as useComposedRefs3 } from "@radix-ui/react-compose-refs";
 import {
   Overlay as RadixOverlayPrimitive
@@ -645,40 +653,42 @@ import {
 import { Presence } from "@radix-ui/react-presence";
 
 // src/drawer/overlay/ui/overlay-primitive.tsx
-import React6, { forwardRef as forwardRef4 } from "react";
+import { forwardRef as forwardRef4 } from "react";
 import {
   Primitive as Primitive2
 } from "@radix-ui/react-primitive";
 import { Slot } from "@radix-ui/react-slot";
 import { RemoveScroll } from "react-remove-scroll";
+import { jsx as jsx6 } from "react/jsx-runtime";
 var OverlayPrimitive = forwardRef4((props, ref) => {
   const { drawerRef, open, modal } = useDrawerContext();
   const { style, blockInteraction = modal, ...other } = props;
-  return /* @__PURE__ */ React6.createElement(
+  return /* @__PURE__ */ jsx6(
     RemoveScroll,
     {
       enabled: blockInteraction,
       as: Slot,
       allowPinchZoom: true,
-      shards: [drawerRef]
-    },
-    /* @__PURE__ */ React6.createElement(
-      Primitive2.div,
-      {
-        "data-state": open ? "open" : "closed",
-        ref,
-        style: {
-          pointerEvents: blockInteraction ? "auto" : "none",
-          ...style
-        },
-        ...other
-      }
-    )
+      shards: [drawerRef],
+      children: /* @__PURE__ */ jsx6(
+        Primitive2.div,
+        {
+          "data-state": open ? "open" : "closed",
+          ref,
+          style: {
+            pointerEvents: blockInteraction ? "auto" : "none",
+            ...style
+          },
+          ...other
+        }
+      )
+    }
   );
 });
 OverlayPrimitive.displayName = "Drawer.OverlayPrimitive";
 
 // src/drawer/overlay/ui/overlay.tsx
+import { jsx as jsx7 } from "react/jsx-runtime";
 var Overlay = forwardRef5(
   ({ radixPrimitive = true, fadeFrom = 0, finalOpacity = 0.8, ...props }, forwardedRef) => {
     const contextForceMount = usePortalContext();
@@ -705,40 +715,40 @@ var Overlay = forwardRef5(
       else resetStyle2("transition");
     });
     if (radixPrimitive)
-      return /* @__PURE__ */ React7.createElement(
+      return /* @__PURE__ */ jsx7(
         RadixOverlayPrimitive,
         {
-          "vladyoslav-drawer-overlay": "",
+          "gv-drawer-overlay": "",
           "data-testid": "overlay",
           ref: composedRef,
           ...other
         }
       );
-    return /* @__PURE__ */ React7.createElement(Presence, { present: forceMount || open }, /* @__PURE__ */ React7.createElement(
+    return /* @__PURE__ */ jsx7(Presence, { present: forceMount || open, children: /* @__PURE__ */ jsx7(
       OverlayPrimitive,
       {
-        "vladyoslav-drawer-overlay": "",
+        "gv-drawer-overlay": "",
         "data-testid": "overlay",
         ref: composedRef,
         ...other
       }
-    ));
+    ) });
   }
 );
 Overlay.displayName = "Drawer.Overlay";
 
 // src/drawer/portal/ui/portal.tsx
-import React8 from "react";
 import {
   Portal as PortalPrimitive
 } from "@radix-ui/react-dialog";
+import { jsx as jsx8 } from "react/jsx-runtime";
 var Portal = ({ ...props }) => {
-  return /* @__PURE__ */ React8.createElement(PortalContextProvider, { forceMount: props.forceMount }, /* @__PURE__ */ React8.createElement(PortalPrimitive, { ...props }));
+  return /* @__PURE__ */ jsx8(PortalContextProvider, { forceMount: props.forceMount, children: /* @__PURE__ */ jsx8(PortalPrimitive, { ...props }) });
 };
 Portal.displayName = "Drawer.Portal";
 
 // src/drawer/root/ui/root.tsx
-import React9, { useRef as useRef5 } from "react";
+import { useRef as useRef5 } from "react";
 import { Root as RootPrimitive } from "@radix-ui/react-dialog";
 
 // src/drawer/root/lib/hooks/use-open-state.ts
@@ -777,7 +787,7 @@ var useConstraintEvents = (drawerRef, scrollableRef, drawerControls, scrollableC
 // src/drawer/root/lib/hooks/use-scaled-background.ts
 var useScaledBackground = (drawerControls, drawerRef, snapPoints, shouldScaleBackground, scaleFrom) => {
   const lastPoint = snapPoints[snapPoints.length - 1];
-  const getWrapper = () => document.querySelector("[vladyoslav-drawer-wrapper]");
+  const getWrapper = () => document.querySelector("[gv-drawer-wrapper]");
   useValueChange(drawerControls.y, (latest) => {
     if (!shouldScaleBackground) return;
     const node = drawerRef.current;
@@ -805,6 +815,7 @@ var useScaledBackground = (drawerControls, drawerRef, snapPoints, shouldScaleBac
 };
 
 // src/drawer/root/ui/root.tsx
+import { jsx as jsx9 } from "react/jsx-runtime";
 var Root = ({
   defaultOpen = false,
   open: cOpen,
@@ -854,11 +865,11 @@ var Root = ({
     shouldScaleBackground,
     scaleFrom
   );
-  return /* @__PURE__ */ React9.createElement(RootPrimitive, { open, onOpenChange, modal }, /* @__PURE__ */ React9.createElement(DrawerContextProvider, { value: context }, children));
+  return /* @__PURE__ */ jsx9(RootPrimitive, { open, onOpenChange, modal, children: /* @__PURE__ */ jsx9(DrawerContextProvider, { value: context, children }) });
 };
 
 // src/drawer/scrollable/ui/scrollable.tsx
-import React10, { forwardRef as forwardRef6, useEffect as useEffect5, useRef as useRef6 } from "react";
+import { forwardRef as forwardRef6, useEffect as useEffect5, useRef as useRef6 } from "react";
 import { useComposedRefs as useComposedRefs4 } from "@radix-ui/react-compose-refs";
 
 // src/drawer/scrollable/lib/helpers.ts
@@ -870,6 +881,7 @@ var getMinConstraint2 = (el) => {
 };
 
 // src/drawer/scrollable/ui/scrollable.tsx
+import { jsx as jsx10 } from "react/jsx-runtime";
 var Scrollable = forwardRef6(
   ({ onConstraint, onDragEnd, onPointerDown, ...props }, forwardedRef) => {
     const {
@@ -890,10 +902,17 @@ var Scrollable = forwardRef6(
       y.set(max);
       drawerControls.unlock();
       scrollableControls.lock();
-    }, [snap]);
+    }, [
+      snap,
+      drawerControls.unlock,
+      scrollableControls.lock,
+      snapPoints.length,
+      snapPoints[snapPoints.length - 1],
+      y.set
+    ]);
     useEffect5(() => {
       y.set(max);
-    }, []);
+    }, [y.set]);
     const resetTransition = () => resetStyle2("transitionDuration");
     const resetToBounds = () => {
       const node = scrollableRef.current;
@@ -933,10 +952,10 @@ var Scrollable = forwardRef6(
       animationId.current = null;
       resetTransition();
     };
-    return /* @__PURE__ */ React10.createElement(
+    return /* @__PURE__ */ jsx10(
       Draggable,
       {
-        "vladyoslav-drawer-scrollable": "",
+        "gv-drawer-scrollable": "",
         ref: composedRef,
         dragControls: scrollableControls,
         constraints: {
@@ -954,10 +973,7 @@ var Scrollable = forwardRef6(
 Scrollable.displayName = "Drawer.Scrollable";
 
 // src/drawer/snap-areas/ui/snap-areas.tsx
-import React13, { forwardRef as forwardRef7 } from "react";
-
-// src/drawer/snap-areas/ui/areas.tsx
-import React11 from "react";
+import { forwardRef as forwardRef7 } from "react";
 
 // src/drawer/snap-areas/lib/constants.ts
 var COLORS = [
@@ -978,6 +994,7 @@ var useMounted = () => {
 };
 
 // src/drawer/snap-areas/ui/areas.tsx
+import { jsx as jsx11 } from "react/jsx-runtime";
 var Areas = () => {
   const { snapPoints, dismissible, drawerRef } = useDrawerContext();
   const dismissiblePoints = dismissible ? [0, ...snapPoints] : snapPoints;
@@ -988,23 +1005,23 @@ var Areas = () => {
     ([prev, acc], cur) => [cur, [...acc, cur - prev]],
     [0, []]
   );
-  return [...snapHeights, `100%`].map((height, index) => /* @__PURE__ */ React11.createElement(
+  return [...snapHeights, `100%`].map((height, index) => /* @__PURE__ */ jsx11(
     "div",
     {
-      key: index,
-      "vladyoslav-drawer-area": "",
+      "gv-drawer-area": "",
       style: {
         flexShrink: 0,
         background: COLORS[index % COLORS.length],
         opacity: 0.4,
         height
       }
-    }
+    },
+    index
   ));
 };
 
 // src/drawer/snap-areas/ui/lines.tsx
-import React12 from "react";
+import { jsx as jsx12 } from "react/jsx-runtime";
 var Lines = () => {
   const { snapPoints, dismissible, drawerRef } = useDrawerContext();
   const mounted = useMounted();
@@ -1012,11 +1029,10 @@ var Lines = () => {
   const snapLines = (dismissible ? [0, ...snapPoints] : snapPoints).map(
     (point) => cssToPx(point, drawerRef.current)
   );
-  return snapLines.map((line, index) => /* @__PURE__ */ React12.createElement(
+  return snapLines.map((line, index) => /* @__PURE__ */ jsx12(
     "div",
     {
-      key: line,
-      "vladyoslav-drawer-lines": "",
+      "gv-drawer-lines": "",
       style: {
         left: 0,
         right: 0,
@@ -1025,19 +1041,21 @@ var Lines = () => {
         borderColor: COLORS[index % COLORS.length],
         bottom: line
       }
-    }
+    },
+    line
   ));
 };
 
 // src/drawer/snap-areas/ui/snap-areas.tsx
+import { jsx as jsx13, jsxs } from "react/jsx-runtime";
 var SnapAreas = forwardRef7(({ ...props }, ref) => {
   const { open } = useDrawerContext();
   if (!open) return null;
-  return /* @__PURE__ */ React13.createElement(
+  return /* @__PURE__ */ jsxs(
     "div",
     {
       ref,
-      "vladyoslav-drawer-snap-areas": "",
+      "gv-drawer-snap-areas": "",
       style: {
         position: "fixed",
         inset: 0,
@@ -1045,13 +1063,18 @@ var SnapAreas = forwardRef7(({ ...props }, ref) => {
         flexDirection: "column-reverse",
         pointerEvents: "none"
       },
-      ...props
-    },
-    /* @__PURE__ */ React13.createElement(Lines, null),
-    /* @__PURE__ */ React13.createElement(Areas, null)
+      ...props,
+      children: [
+        /* @__PURE__ */ jsx13(Lines, {}),
+        /* @__PURE__ */ jsx13(Areas, {})
+      ]
+    }
   );
 });
 SnapAreas.displayName = "Drawer.SnapAreas";
+
+// src/drawer/index.css
+styleInject('@source ".";\n[gv-drawer-overlay],\n[gv-drawer],\n[gv-drawer-scrollable],\n[gv-drawer-wrapper] {\n  --duration: 0.5s;\n  --timing-function: cubic-bezier(0.32, 0.72, 0, 1);\n  --scroll-bar-shift: var(--removed-body-scroll-bar-size, 0);\n}\n[gv-drawer-overlay] {\n  opacity: 0;\n  transition: opacity var(--duration) var(--timing-function);\n}\n[gv-drawer] {\n  transform: translate3d(0, 100%, 0);\n}\n[gv-drawer],\n[gv-drawer-scrollable] {\n  transition: transform var(--duration) var(--timing-function);\n}\n[gv-drawer-wrapper] {\n  --border-radius: 8px;\n  --offset: 14;\n  transform-origin: top center;\n  transition-property: transform, border-radius;\n  transition-duration: var(--duration);\n  transition-timing-function: var(--timing-function);\n}\n[gv-drawer]::after {\n  content: "";\n  position: absolute;\n  top: calc(100% - 1px);\n  background: inherit;\n  background-color: inherit;\n  left: 0;\n  right: 0;\n  height: 100%;\n  z-index: -1;\n}\n[gv-drawer-overlay][data-state=closed],\n[gv-drawer][data-state=closed] {\n  animation: fake-animation var(--duration) var(--timing-function);\n}\n@keyframes fake-animation {\n  from {\n  }\n  to {\n  }\n}\n');
 
 // src/drawer/index.ts
 var Drawer = {

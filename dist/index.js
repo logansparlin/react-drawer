@@ -1,10 +1,8 @@
 "use client"
 "use strict";
-var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -18,14 +16,6 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/index.ts
@@ -49,24 +39,26 @@ module.exports = __toCommonJS(index_exports);
 var import_react_dialog5 = require("@radix-ui/react-dialog");
 
 // src/drawer/content/ui/content.tsx
-var import_react13 = __toESM(require("react"));
+var import_react13 = require("react");
 var import_react_dialog = require("@radix-ui/react-dialog");
 
 // src/drawer/lib/hooks/use-drawer-context.ts
 var import_react3 = require("react");
 
 // src/drawer/lib/providers/drawer-context.tsx
-var import_react = __toESM(require("react"));
+var import_react = require("react");
+var import_jsx_runtime = require("react/jsx-runtime");
 var DrawerContext = (0, import_react.createContext)(null);
-var DrawerContextProvider = (props) => /* @__PURE__ */ import_react.default.createElement(DrawerContext.Provider, { ...props });
+var DrawerContextProvider = (props) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DrawerContext.Provider, { ...props });
 
 // src/drawer/lib/providers/portal-context.tsx
-var import_react2 = __toESM(require("react"));
+var import_react2 = require("react");
+var import_jsx_runtime2 = require("react/jsx-runtime");
 var PortalContext = (0, import_react2.createContext)(void 0);
 var PortalContextProvider = ({
   forceMount,
   ...props
-}) => /* @__PURE__ */ import_react2.default.createElement(PortalContext.Provider, { value: forceMount, ...props });
+}) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(PortalContext.Provider, { value: forceMount, ...props });
 
 // src/drawer/lib/hooks/use-drawer-context.ts
 var useDrawerContext = () => {
@@ -88,7 +80,7 @@ var usePortalContext = () => {
 };
 
 // src/drawer/content/ui/sheet.tsx
-var import_react12 = __toESM(require("react"));
+var import_react12 = require("react");
 var import_react_compose_refs2 = require("@radix-ui/react-compose-refs");
 
 // src/shared/lib/helpers.ts
@@ -96,7 +88,7 @@ var isNumber = (value) => typeof value === "number";
 var isFunction = (value) => typeof value === "function";
 var clamp = (min, max, value) => Math.min(max, Math.max(min, value));
 var mergeHandlers = (...handlers) => {
-  return (...args) => handlers.forEach((handler) => handler == null ? void 0 : handler(...args));
+  return (...args) => handlers.forEach((handler) => void (handler == null ? void 0 : handler(...args)));
 };
 var cache = /* @__PURE__ */ new WeakMap();
 var setStyle = (el, style) => {
@@ -113,7 +105,10 @@ var resetStyle = (el, prop) => {
   const original = cache.get(el);
   if (!original) return;
   const elStyle = el.style;
-  if (prop) return elStyle[prop] = original[prop];
+  if (prop) {
+    elStyle[prop] = original[prop];
+    return;
+  }
   Object.entries(original).forEach(([key, value]) => {
     elStyle[key] = value;
   });
@@ -128,7 +123,8 @@ var cssToPx = (value, el) => {
   if (!el) throw new Error("You have to provide element");
   const rect = el.getBoundingClientRect();
   if (isNumber(value)) return value;
-  if (value.match(PERCENT_REGEX)) return rect.height * parseFloat(value) / 100;
+  if (value.match(PERCENT_REGEX))
+    return rect.height * parseFloat(value) / 100;
   if (value.match(PX_REGEX)) return parseFloat(value);
   throw new Error("Unknown value units");
 };
@@ -151,7 +147,7 @@ var useValue = (initial) => {
   const key = (0, import_react5.useRef)(0);
   const handlers = (0, import_react5.useRef)(/* @__PURE__ */ new Map());
   const notify = () => {
-    handlers.current.forEach((handler) => handler(v.current));
+    handlers.current.forEach((handler) => void handler(v.current));
   };
   const set = (value) => {
     if (value === v.current) return;
@@ -180,18 +176,18 @@ var useValueChange = (value, handler) => {
     return () => {
       unsub();
     };
-  }, []);
+  }, [handler, value.subscribe]);
 };
 
 // src/shared/lib/hooks/use-set-style.ts
 var useSetStyle = (ref) => {
   const set = (style) => {
-    const el = ref.current;
+    const el = ref == null ? void 0 : ref.current;
     if (!el) return;
     setStyle(el, style);
   };
   const reset = (prop) => {
-    const el = ref.current;
+    const el = ref == null ? void 0 : ref.current;
     if (!el) return;
     resetStyle(el, prop);
   };
@@ -199,7 +195,7 @@ var useSetStyle = (ref) => {
 };
 
 // src/shared/ui/draggable/ui/draggable.tsx
-var import_react9 = __toESM(require("react"));
+var import_react9 = require("react");
 var import_react_compose_refs = require("@radix-ui/react-compose-refs");
 var import_react_primitive = require("@radix-ui/react-primitive");
 
@@ -215,7 +211,7 @@ var hasScrollOverflow = (el) => {
 var shouldDrag = (el, root, isDraggingDown, checkScroll) => {
   var _a;
   const selection = (_a = window.getSelection()) == null ? void 0 : _a.toString();
-  if (selection && selection.length) return false;
+  if (selection == null ? void 0 : selection.length) return false;
   if (!checkScroll) return true;
   let element = el;
   while (element) {
@@ -405,15 +401,18 @@ var useDraggable = ({
 // src/shared/ui/draggable/lib/hooks/use-prevent-scroll.ts
 var import_react8 = require("react");
 var usePreventScroll = (isDragging) => {
-  const handleTouchMove = (e) => {
-    if (isDragging.get()) e.preventDefault();
-  };
+  const handleTouchMove = (0, import_react8.useCallback)(
+    (e) => {
+      if (isDragging.get()) e.preventDefault();
+    },
+    [isDragging]
+  );
   (0, import_react8.useEffect)(() => {
     document.addEventListener("touchmove", handleTouchMove, { passive: false });
     return () => {
       document.removeEventListener("touchmove", handleTouchMove);
     };
-  }, []);
+  }, [handleTouchMove]);
 };
 
 // #style-inject:#style-inject
@@ -439,9 +438,10 @@ function styleInject(css, { insertAt } = {}) {
 }
 
 // src/shared/ui/draggable/ui/draggable.css
-styleInject("[vladyoslav-drawer-draggable] {\n}\n@media (hover: hover) and (pointer: fine) {\n  [vladyoslav-drawer-draggable] {\n    user-select: none;\n  }\n}\n");
+styleInject("[gv-drawer-draggable] {\n}\n@media (hover: hover) and (pointer: fine) {\n  [gv-drawer-draggable] {\n    user-select: none;\n  }\n}\n");
 
 // src/shared/ui/draggable/ui/draggable.tsx
+var import_jsx_runtime3 = require("react/jsx-runtime");
 var _Draggable = ({
   constraints,
   dragControls: cDragControls,
@@ -480,10 +480,10 @@ var _Draggable = ({
     else resetStyle2("transition");
   });
   usePreventScroll(isDragging);
-  return /* @__PURE__ */ import_react9.default.createElement(
+  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
     import_react_primitive.Primitive.div,
     {
-      "vladyoslav-drawer-draggable": "",
+      "gv-drawer-draggable": "",
       draggable: "false",
       ref: composedRef,
       onPointerDown: mergeHandlers(handlePointerDown, onPointerDown),
@@ -515,7 +515,7 @@ var import_react10 = require("react");
 // src/drawer/content/lib/hooks/use-drag-events/use-get-snap.ts
 var useGetSnap = (snapPoints, ref) => {
   return (pos, velocity) => {
-    if (ref.current === null) return;
+    if (!(ref == null ? void 0 : ref.current) || ref.current === null) return;
     const lastPoint = snapPoints[snapPoints.length - 1];
     const maxAddValue = cssToPx(lastPoint, ref.current);
     const posWithVelocity = pos + -(velocity / 7) * maxAddValue;
@@ -536,12 +536,13 @@ var useDragEvents = ({
   const drawerRef = (0, import_react10.useRef)(null);
   const dismissablePoints = dismissible ? [0, ...snapPoints] : snapPoints;
   const getSnap2 = useGetSnap(dismissablePoints, drawerRef);
-  const handleDragEnd = (e, { velocity }) => {
-    const node = drawerRef.current;
+  const handleDragEnd = (_e, { velocity }) => {
+    const node = drawerRef == null ? void 0 : drawerRef.current;
     if (!node) return;
     const rect = node.getBoundingClientRect();
     const pos = window.innerHeight - rect.y;
-    let newSnap = getSnap2(pos, locked.get() ? 0 : velocity);
+    const newSnap = getSnap2(pos, locked.get() ? 0 : velocity);
+    if (!newSnap) return;
     if (newSnap === 0) return onClose();
     setSnap(newSnap);
   };
@@ -561,7 +562,7 @@ var useSnapToCurrent = (snapTo, snap, open) => {
   return (0, import_react11.useEffect)(() => {
     if (open) snapTo(snap);
     else snapTo(0);
-  }, [open, snap]);
+  }, [open, snap, snapTo]);
 };
 
 // src/drawer/content/lib/hooks/use-snap-to.ts
@@ -570,6 +571,7 @@ var useSnapTo = (y) => {
 };
 
 // src/drawer/content/ui/sheet.tsx
+var import_jsx_runtime4 = require("react/jsx-runtime");
 var Sheet = (0, import_react12.forwardRef)(
   ({ onConstraint, onPointerUp, onPointerCancel, onDragEnd, ...props }, forwardedRef) => {
     const {
@@ -603,8 +605,8 @@ var Sheet = (0, import_react12.forwardRef)(
     (0, import_react12.useEffect)(() => {
       if (open) resetStyle2("pointerEvents");
       else setStyle2({ pointerEvents: "none" });
-    }, [open]);
-    return /* @__PURE__ */ import_react12.default.createElement(
+    }, [open, resetStyle2, setStyle2]);
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
       Draggable,
       {
         ref: composedRef,
@@ -630,6 +632,7 @@ var Sheet = (0, import_react12.forwardRef)(
 Sheet.displayName = "Drawer.Sheet";
 
 // src/drawer/content/ui/content.tsx
+var import_jsx_runtime5 = require("react/jsx-runtime");
 var Content = (0, import_react13.forwardRef)(
   ({
     onOpenAutoFocus,
@@ -647,13 +650,13 @@ var Content = (0, import_react13.forwardRef)(
       onPointerDownOutside,
       forceMount
     };
-    return /* @__PURE__ */ import_react13.default.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
       import_react_dialog.Content,
       {
         ref,
         asChild: true,
         ...primitiveProps,
-        "vladyoslav-drawer": "",
+        "gv-drawer": "",
         onEscapeKeyDown: (e) => {
           if (drawerControls.isDragging.get()) return e.preventDefault();
           if (!dismissible) e.preventDefault();
@@ -662,56 +665,55 @@ var Content = (0, import_react13.forwardRef)(
         onInteractOutside: (e) => {
           if (!modal || !dismissible) e.preventDefault();
           onInteractOutside == null ? void 0 : onInteractOutside(e);
-        }
-      },
-      /* @__PURE__ */ import_react13.default.createElement(Sheet, { ...props })
+        },
+        children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Sheet, { ...props })
+      }
     );
   }
 );
 Content.displayName = "Drawer.Content";
 
-// src/drawer/index.css
-styleInject('[vladyoslav-drawer-overlay],\n[vladyoslav-drawer],\n[vladyoslav-drawer-scrollable],\n[vladyoslav-drawer-wrapper] {\n  --duration: 0.5s;\n  --timing-function: cubic-bezier(0.32, 0.72, 0, 1);\n  --scroll-bar-shift: var(--removed-body-scroll-bar-size, 0);\n}\n[vladyoslav-drawer-overlay] {\n  opacity: 0;\n  transition: opacity var(--duration) var(--timing-function);\n}\n[vladyoslav-drawer] {\n  transform: translate3d(0, 100%, 0);\n}\n[vladyoslav-drawer],\n[vladyoslav-drawer-scrollable] {\n  transition: transform var(--duration) var(--timing-function);\n}\n[vladyoslav-drawer-wrapper] {\n  --border-radius: 8px;\n  --offset: 14;\n  transform-origin: top center;\n  transition-property: transform, border-radius;\n  transition-duration: var(--duration);\n  transition-timing-function: var(--timing-function);\n}\n[vladyoslav-drawer]::after {\n  content: "";\n  position: absolute;\n  top: calc(100% - 1px);\n  background: inherit;\n  background-color: inherit;\n  left: 0;\n  right: 0;\n  height: 100%;\n  z-index: -1;\n}\n[vladyoslav-drawer-overlay][data-state=closed],\n[vladyoslav-drawer][data-state=closed] {\n  animation: fake-animation var(--duration) var(--timing-function);\n}\n@keyframes fake-animation {\n  from {\n  }\n  to {\n  }\n}\n');
-
 // src/drawer/overlay/ui/overlay.tsx
-var import_react15 = __toESM(require("react"));
+var import_react15 = require("react");
 var import_react_compose_refs3 = require("@radix-ui/react-compose-refs");
 var import_react_dialog2 = require("@radix-ui/react-dialog");
 var import_react_presence = require("@radix-ui/react-presence");
 
 // src/drawer/overlay/ui/overlay-primitive.tsx
-var import_react14 = __toESM(require("react"));
+var import_react14 = require("react");
 var import_react_primitive2 = require("@radix-ui/react-primitive");
 var import_react_slot = require("@radix-ui/react-slot");
 var import_react_remove_scroll = require("react-remove-scroll");
+var import_jsx_runtime6 = require("react/jsx-runtime");
 var OverlayPrimitive = (0, import_react14.forwardRef)((props, ref) => {
   const { drawerRef, open, modal } = useDrawerContext();
   const { style, blockInteraction = modal, ...other } = props;
-  return /* @__PURE__ */ import_react14.default.createElement(
+  return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
     import_react_remove_scroll.RemoveScroll,
     {
       enabled: blockInteraction,
       as: import_react_slot.Slot,
       allowPinchZoom: true,
-      shards: [drawerRef]
-    },
-    /* @__PURE__ */ import_react14.default.createElement(
-      import_react_primitive2.Primitive.div,
-      {
-        "data-state": open ? "open" : "closed",
-        ref,
-        style: {
-          pointerEvents: blockInteraction ? "auto" : "none",
-          ...style
-        },
-        ...other
-      }
-    )
+      shards: [drawerRef],
+      children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+        import_react_primitive2.Primitive.div,
+        {
+          "data-state": open ? "open" : "closed",
+          ref,
+          style: {
+            pointerEvents: blockInteraction ? "auto" : "none",
+            ...style
+          },
+          ...other
+        }
+      )
+    }
   );
 });
 OverlayPrimitive.displayName = "Drawer.OverlayPrimitive";
 
 // src/drawer/overlay/ui/overlay.tsx
+var import_jsx_runtime7 = require("react/jsx-runtime");
 var Overlay = (0, import_react15.forwardRef)(
   ({ radixPrimitive = true, fadeFrom = 0, finalOpacity = 0.8, ...props }, forwardedRef) => {
     const contextForceMount = usePortalContext();
@@ -738,51 +740,51 @@ var Overlay = (0, import_react15.forwardRef)(
       else resetStyle2("transition");
     });
     if (radixPrimitive)
-      return /* @__PURE__ */ import_react15.default.createElement(
+      return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
         import_react_dialog2.Overlay,
         {
-          "vladyoslav-drawer-overlay": "",
+          "gv-drawer-overlay": "",
           "data-testid": "overlay",
           ref: composedRef,
           ...other
         }
       );
-    return /* @__PURE__ */ import_react15.default.createElement(import_react_presence.Presence, { present: forceMount || open }, /* @__PURE__ */ import_react15.default.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_react_presence.Presence, { present: forceMount || open, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
       OverlayPrimitive,
       {
-        "vladyoslav-drawer-overlay": "",
+        "gv-drawer-overlay": "",
         "data-testid": "overlay",
         ref: composedRef,
         ...other
       }
-    ));
+    ) });
   }
 );
 Overlay.displayName = "Drawer.Overlay";
 
 // src/drawer/portal/ui/portal.tsx
-var import_react16 = __toESM(require("react"));
 var import_react_dialog3 = require("@radix-ui/react-dialog");
+var import_jsx_runtime8 = require("react/jsx-runtime");
 var Portal = ({ ...props }) => {
-  return /* @__PURE__ */ import_react16.default.createElement(PortalContextProvider, { forceMount: props.forceMount }, /* @__PURE__ */ import_react16.default.createElement(import_react_dialog3.Portal, { ...props }));
+  return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(PortalContextProvider, { forceMount: props.forceMount, children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_react_dialog3.Portal, { ...props }) });
 };
 Portal.displayName = "Drawer.Portal";
 
 // src/drawer/root/ui/root.tsx
-var import_react19 = __toESM(require("react"));
+var import_react18 = require("react");
 var import_react_dialog4 = require("@radix-ui/react-dialog");
 
 // src/drawer/root/lib/hooks/use-open-state.ts
-var import_react17 = require("react");
+var import_react16 = require("react");
 var useOpenState = (init, open, onOpenChange) => {
-  const internal = (0, import_react17.useState)(init);
+  const internal = (0, import_react16.useState)(init);
   return open && onOpenChange ? [open, onOpenChange] : internal;
 };
 
 // src/drawer/root/lib/hooks/use-snap-state.ts
-var import_react18 = require("react");
+var import_react17 = require("react");
 var useSnapState = (init, snap, setSnap) => {
-  const internal = (0, import_react18.useState)(init);
+  const internal = (0, import_react17.useState)(init);
   return snap && setSnap ? [snap, setSnap] : internal;
 };
 
@@ -808,7 +810,7 @@ var useConstraintEvents = (drawerRef, scrollableRef, drawerControls, scrollableC
 // src/drawer/root/lib/hooks/use-scaled-background.ts
 var useScaledBackground = (drawerControls, drawerRef, snapPoints, shouldScaleBackground, scaleFrom) => {
   const lastPoint = snapPoints[snapPoints.length - 1];
-  const getWrapper = () => document.querySelector("[vladyoslav-drawer-wrapper]");
+  const getWrapper = () => document.querySelector("[gv-drawer-wrapper]");
   useValueChange(drawerControls.y, (latest) => {
     if (!shouldScaleBackground) return;
     const node = drawerRef.current;
@@ -836,6 +838,7 @@ var useScaledBackground = (drawerControls, drawerRef, snapPoints, shouldScaleBac
 };
 
 // src/drawer/root/ui/root.tsx
+var import_jsx_runtime9 = require("react/jsx-runtime");
 var Root = ({
   defaultOpen = false,
   open: cOpen,
@@ -854,8 +857,8 @@ var Root = ({
   const scrollableControls = useDragControls(true);
   const [open, onOpenChange] = useOpenState(defaultOpen, cOpen, cOnOpenChange);
   const [snap, setSnap] = useSnapState(snapPoints[0], cSnap, cSetSnap);
-  const drawerRef = (0, import_react19.useRef)(null);
-  const scrollableRef = (0, import_react19.useRef)(null);
+  const drawerRef = (0, import_react18.useRef)(null);
+  const scrollableRef = (0, import_react18.useRef)(null);
   const constraintHandlers = useConstraintEvents(
     drawerRef,
     scrollableRef,
@@ -885,11 +888,11 @@ var Root = ({
     shouldScaleBackground,
     scaleFrom
   );
-  return /* @__PURE__ */ import_react19.default.createElement(import_react_dialog4.Root, { open, onOpenChange, modal }, /* @__PURE__ */ import_react19.default.createElement(DrawerContextProvider, { value: context }, children));
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_react_dialog4.Root, { open, onOpenChange, modal, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(DrawerContextProvider, { value: context, children }) });
 };
 
 // src/drawer/scrollable/ui/scrollable.tsx
-var import_react20 = __toESM(require("react"));
+var import_react19 = require("react");
 var import_react_compose_refs4 = require("@radix-ui/react-compose-refs");
 
 // src/drawer/scrollable/lib/helpers.ts
@@ -901,7 +904,8 @@ var getMinConstraint2 = (el) => {
 };
 
 // src/drawer/scrollable/ui/scrollable.tsx
-var Scrollable = (0, import_react20.forwardRef)(
+var import_jsx_runtime10 = require("react/jsx-runtime");
+var Scrollable = (0, import_react19.forwardRef)(
   ({ onConstraint, onDragEnd, onPointerDown, ...props }, forwardedRef) => {
     const {
       drawerControls,
@@ -912,19 +916,26 @@ var Scrollable = (0, import_react20.forwardRef)(
       onScrollableConstraint
     } = useDrawerContext();
     const { y } = scrollableControls;
-    const animationId = (0, import_react20.useRef)(null);
+    const animationId = (0, import_react19.useRef)(null);
     const composedRef = (0, import_react_compose_refs4.useComposedRefs)(scrollableRef, forwardedRef);
     const [setStyle2, resetStyle2] = useSetStyle(scrollableRef);
     const max = 0;
-    (0, import_react20.useEffect)(() => {
+    (0, import_react19.useEffect)(() => {
       if (snap === snapPoints[snapPoints.length - 1]) return;
       y.set(max);
       drawerControls.unlock();
       scrollableControls.lock();
-    }, [snap]);
-    (0, import_react20.useEffect)(() => {
+    }, [
+      snap,
+      drawerControls.unlock,
+      scrollableControls.lock,
+      snapPoints.length,
+      snapPoints[snapPoints.length - 1],
+      y.set
+    ]);
+    (0, import_react19.useEffect)(() => {
       y.set(max);
-    }, []);
+    }, [y.set]);
     const resetTransition = () => resetStyle2("transitionDuration");
     const resetToBounds = () => {
       const node = scrollableRef.current;
@@ -964,10 +975,10 @@ var Scrollable = (0, import_react20.forwardRef)(
       animationId.current = null;
       resetTransition();
     };
-    return /* @__PURE__ */ import_react20.default.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
       Draggable,
       {
-        "vladyoslav-drawer-scrollable": "",
+        "gv-drawer-scrollable": "",
         ref: composedRef,
         dragControls: scrollableControls,
         constraints: {
@@ -985,10 +996,7 @@ var Scrollable = (0, import_react20.forwardRef)(
 Scrollable.displayName = "Drawer.Scrollable";
 
 // src/drawer/snap-areas/ui/snap-areas.tsx
-var import_react24 = __toESM(require("react"));
-
-// src/drawer/snap-areas/ui/areas.tsx
-var import_react22 = __toESM(require("react"));
+var import_react21 = require("react");
 
 // src/drawer/snap-areas/lib/constants.ts
 var COLORS = [
@@ -1001,14 +1009,15 @@ var COLORS = [
 ];
 
 // src/drawer/snap-areas/lib/hooks/use-mounted.ts
-var import_react21 = require("react");
+var import_react20 = require("react");
 var useMounted = () => {
-  const [mounted, setMounted] = (0, import_react21.useState)(false);
-  (0, import_react21.useEffect)(() => setMounted(true), []);
+  const [mounted, setMounted] = (0, import_react20.useState)(false);
+  (0, import_react20.useEffect)(() => setMounted(true), []);
   return mounted;
 };
 
 // src/drawer/snap-areas/ui/areas.tsx
+var import_jsx_runtime11 = require("react/jsx-runtime");
 var Areas = () => {
   const { snapPoints, dismissible, drawerRef } = useDrawerContext();
   const dismissiblePoints = dismissible ? [0, ...snapPoints] : snapPoints;
@@ -1019,23 +1028,23 @@ var Areas = () => {
     ([prev, acc], cur) => [cur, [...acc, cur - prev]],
     [0, []]
   );
-  return [...snapHeights, `100%`].map((height, index) => /* @__PURE__ */ import_react22.default.createElement(
+  return [...snapHeights, `100%`].map((height, index) => /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
     "div",
     {
-      key: index,
-      "vladyoslav-drawer-area": "",
+      "gv-drawer-area": "",
       style: {
         flexShrink: 0,
         background: COLORS[index % COLORS.length],
         opacity: 0.4,
         height
       }
-    }
+    },
+    index
   ));
 };
 
 // src/drawer/snap-areas/ui/lines.tsx
-var import_react23 = __toESM(require("react"));
+var import_jsx_runtime12 = require("react/jsx-runtime");
 var Lines = () => {
   const { snapPoints, dismissible, drawerRef } = useDrawerContext();
   const mounted = useMounted();
@@ -1043,11 +1052,10 @@ var Lines = () => {
   const snapLines = (dismissible ? [0, ...snapPoints] : snapPoints).map(
     (point) => cssToPx(point, drawerRef.current)
   );
-  return snapLines.map((line, index) => /* @__PURE__ */ import_react23.default.createElement(
+  return snapLines.map((line, index) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
     "div",
     {
-      key: line,
-      "vladyoslav-drawer-lines": "",
+      "gv-drawer-lines": "",
       style: {
         left: 0,
         right: 0,
@@ -1056,19 +1064,21 @@ var Lines = () => {
         borderColor: COLORS[index % COLORS.length],
         bottom: line
       }
-    }
+    },
+    line
   ));
 };
 
 // src/drawer/snap-areas/ui/snap-areas.tsx
-var SnapAreas = (0, import_react24.forwardRef)(({ ...props }, ref) => {
+var import_jsx_runtime13 = require("react/jsx-runtime");
+var SnapAreas = (0, import_react21.forwardRef)(({ ...props }, ref) => {
   const { open } = useDrawerContext();
   if (!open) return null;
-  return /* @__PURE__ */ import_react24.default.createElement(
+  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
     "div",
     {
       ref,
-      "vladyoslav-drawer-snap-areas": "",
+      "gv-drawer-snap-areas": "",
       style: {
         position: "fixed",
         inset: 0,
@@ -1076,13 +1086,18 @@ var SnapAreas = (0, import_react24.forwardRef)(({ ...props }, ref) => {
         flexDirection: "column-reverse",
         pointerEvents: "none"
       },
-      ...props
-    },
-    /* @__PURE__ */ import_react24.default.createElement(Lines, null),
-    /* @__PURE__ */ import_react24.default.createElement(Areas, null)
+      ...props,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Lines, {}),
+        /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Areas, {})
+      ]
+    }
   );
 });
 SnapAreas.displayName = "Drawer.SnapAreas";
+
+// src/drawer/index.css
+styleInject('@source ".";\n[gv-drawer-overlay],\n[gv-drawer],\n[gv-drawer-scrollable],\n[gv-drawer-wrapper] {\n  --duration: 0.5s;\n  --timing-function: cubic-bezier(0.32, 0.72, 0, 1);\n  --scroll-bar-shift: var(--removed-body-scroll-bar-size, 0);\n}\n[gv-drawer-overlay] {\n  opacity: 0;\n  transition: opacity var(--duration) var(--timing-function);\n}\n[gv-drawer] {\n  transform: translate3d(0, 100%, 0);\n}\n[gv-drawer],\n[gv-drawer-scrollable] {\n  transition: transform var(--duration) var(--timing-function);\n}\n[gv-drawer-wrapper] {\n  --border-radius: 8px;\n  --offset: 14;\n  transform-origin: top center;\n  transition-property: transform, border-radius;\n  transition-duration: var(--duration);\n  transition-timing-function: var(--timing-function);\n}\n[gv-drawer]::after {\n  content: "";\n  position: absolute;\n  top: calc(100% - 1px);\n  background: inherit;\n  background-color: inherit;\n  left: 0;\n  right: 0;\n  height: 100%;\n  z-index: -1;\n}\n[gv-drawer-overlay][data-state=closed],\n[gv-drawer][data-state=closed] {\n  animation: fake-animation var(--duration) var(--timing-function);\n}\n@keyframes fake-animation {\n  from {\n  }\n  to {\n  }\n}\n');
 
 // src/drawer/index.ts
 var Drawer = {

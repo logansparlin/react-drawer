@@ -8,8 +8,8 @@ import {
 } from "@/shared/ui/draggable";
 
 export const useConstraintEvents = (
-	drawerRef: RefObject<HTMLDivElement>,
-	scrollableRef: RefObject<HTMLDivElement>,
+	drawerRef: RefObject<HTMLDivElement | null>,
+	scrollableRef: RefObject<HTMLDivElement | null>,
 	drawerControls: DragControls<Snap>,
 	scrollableControls: DragControls<number>,
 ) => {

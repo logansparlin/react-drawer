@@ -1,4 +1,6 @@
-import { type FC } from "react";
+"use client";
+
+import type { FC } from "react";
 
 import { DrawerClose, type DrawerCloseProps } from "@gv/drawer";
 
@@ -27,6 +29,7 @@ export const Close: FC<DrawerCloseProps> = ({ className, ...props }) => (
 			strokeLinejoin="round"
 			className="lucide lucide-x"
 		>
+			<title>Close</title>
 			<path d="M18 6 6 18" />
 			<path d="m6 6 12 12" />
 		</svg>

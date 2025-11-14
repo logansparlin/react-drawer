@@ -1,3 +1,5 @@
+"use client";
+
 import { type FC, forwardRef } from "react";
 
 import { DrawerContent, type DrawerContentProps } from "@gv/drawer";

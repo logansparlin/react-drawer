@@ -22,8 +22,8 @@ export interface DrawerContextValue {
 	snap: Snap;
 	setSnap: SetSnap;
 	dismissible: boolean;
-	drawerRef: RefObject<HTMLDivElement>;
-	scrollableRef: RefObject<HTMLDivElement>;
+	drawerRef: RefObject<HTMLDivElement | null>;
+	scrollableRef: RefObject<HTMLDivElement | null>;
 	scrollLockTimeout: number;
 	modal: boolean;
 	onDrawerConstraint: ConstraintEventHandler;

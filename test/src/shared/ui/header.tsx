@@ -1,4 +1,6 @@
-import { type FC } from "react";
+"use client";
+
+import type { FC } from "react";
 
 import { DrawerTitle, type DrawerTitleProps } from "@gv/drawer";
 

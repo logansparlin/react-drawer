@@ -6,10 +6,7 @@ import {
 } from "react";
 
 import { useComposedRefs } from "@radix-ui/react-compose-refs";
-import {
-	type ComponentPropsWithoutRef,
-	Primitive,
-} from "@radix-ui/react-primitive";
+import { Primitive } from "@radix-ui/react-primitive";
 
 import { mergeHandlers } from "@/shared/lib/helpers";
 import { useSetStyle, useValueChange } from "@/shared/lib/hooks";
@@ -37,7 +34,7 @@ interface DragProps<T> {
 }
 
 type PrimitiveDivProps<T> = Omit<
-	ComponentPropsWithoutRef<typeof Primitive.div>,
+	React.ComponentPropsWithoutRef<typeof Primitive.div>,
 	keyof DragProps<T>
 >;
 
