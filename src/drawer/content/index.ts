@@ -1,1 +1,1 @@
-export * from './ui/content'
+export * from "./ui/content";

@@ -1,17 +1,20 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from "react";
 
-import { type Value } from '@/shared/lib/types'
+import type { Value } from "@/shared/lib/types";
 
 export const usePreventScroll = (isDragging: Value<boolean>) => {
-  const handleTouchMove = (e: TouchEvent) => {
-    if (isDragging.get()) e.preventDefault()
-  }
+	const handleTouchMove = useCallback(
+		(e: TouchEvent) => {
+			if (isDragging.get()) e.preventDefault();
+		},
+		[isDragging],
+	);
 
-  useEffect(() => {
-    document.addEventListener('touchmove', handleTouchMove, { passive: false })
+	useEffect(() => {
+		document.addEventListener("touchmove", handleTouchMove, { passive: false });
 
-    return () => {
-      document.removeEventListener('touchmove', handleTouchMove)
-    }
-  }, [])
-}
+		return () => {
+			document.removeEventListener("touchmove", handleTouchMove);
+		};
+	}, [handleTouchMove]);
+};

@@ -1,13 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect } from "react";
 
-import { type Handler, type Value } from '../types'
+import type { Handler, Value } from "../types";
 
 export const useValueChange = <T>(value: Value<T>, handler: Handler<T>) => {
-  useEffect(() => {
-    const unsub = value.subscribe(handler)
+	useEffect(() => {
+		const unsub = value.subscribe(handler);
 
-    return () => {
-      unsub()
-    }
-  }, [])
-}
+		return () => {
+			unsub();
+		};
+	}, [handler, value.subscribe]);
+};

@@ -1,12 +1,12 @@
-import React, { type FC, type PropsWithChildren, createContext } from 'react'
+import { type FC, type PropsWithChildren, createContext } from "react";
 
-export const PortalContext = createContext<true | undefined>(undefined)
+export const PortalContext = createContext<true | undefined>(undefined);
 
 export interface PortalContextProviderProps extends PropsWithChildren {
-  forceMount?: true
+	forceMount?: true;
 }
 
 export const PortalContextProvider: FC<PortalContextProviderProps> = ({
-  forceMount,
-  ...props
-}) => <PortalContext.Provider value={forceMount} {...props} />
+	forceMount,
+	...props
+}) => <PortalContext.Provider value={forceMount} {...props} />;

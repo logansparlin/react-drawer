@@ -1,9 +1,9 @@
-[vladyoslav-drawer-draggable] {
-  /*touch-action: none;*/
+[gv-drawer-draggable] {
+	/*touch-action: none;*/
 }
 
 @media (hover: hover) and (pointer: fine) {
-  [vladyoslav-drawer-draggable] {
-    user-select: none;
-  }
+	[gv-drawer-draggable] {
+		user-select: none;
+	}
 }

@@ -1,36 +1,36 @@
-import { type RefObject } from 'react'
+import type { RefObject } from "react";
 
-import { type Snap } from '@/drawer/lib/types'
+import type { Snap } from "@/drawer/lib/types";
 import {
-  type ConstraintEventHandler,
-  ConstraintType,
-  type DragControls
-} from '@/shared/ui/draggable'
+	type ConstraintEventHandler,
+	ConstraintType,
+	type DragControls,
+} from "@/shared/ui/draggable";
 
 export const useConstraintEvents = (
-  drawerRef: RefObject<HTMLDivElement>,
-  scrollableRef: RefObject<HTMLDivElement>,
-  drawerControls: DragControls<Snap>,
-  scrollableControls: DragControls<number>
+	drawerRef: RefObject<HTMLDivElement>,
+	scrollableRef: RefObject<HTMLDivElement>,
+	drawerControls: DragControls<Snap>,
+	scrollableControls: DragControls<number>,
 ) => {
-  const onDrawerConstraint: ConstraintEventHandler = (_, type) => {
-    if (!drawerRef.current) return
-    if (!scrollableRef.current) return
-    if (type === ConstraintType.Max) return
+	const onDrawerConstraint: ConstraintEventHandler = (_, type) => {
+		if (!drawerRef.current) return;
+		if (!scrollableRef.current) return;
+		if (type === ConstraintType.Max) return;
 
-    drawerControls.lock()
-    scrollableControls.unlock()
+		drawerControls.lock();
+		scrollableControls.unlock();
 
-    return false
-  }
+		return false;
+	};
 
-  const onScrollableConstraint: ConstraintEventHandler = (_, type) => {
-    if (!scrollableRef.current) return
-    if (type === ConstraintType.Min) return
+	const onScrollableConstraint: ConstraintEventHandler = (_, type) => {
+		if (!scrollableRef.current) return;
+		if (type === ConstraintType.Min) return;
 
-    drawerControls.unlock()
-    scrollableControls.lock()
-  }
+		drawerControls.unlock();
+		scrollableControls.lock();
+	};
 
-  return { onDrawerConstraint, onScrollableConstraint }
-}
+	return { onDrawerConstraint, onScrollableConstraint };
+};

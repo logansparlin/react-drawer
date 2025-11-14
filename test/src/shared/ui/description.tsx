@@ -1,13 +1,10 @@
-import { type FC } from 'react'
+import { type FC } from "react";
 
-import {
-  DrawerDescription,
-  type DrawerDescriptionProps
-} from '@vladyoslav/drawer'
+import { DrawerDescription, type DrawerDescriptionProps } from "@gv/drawer";
 
 export const Description: FC<DrawerDescriptionProps> = (props) => (
-  <DrawerDescription
-    {...props}
-    className="font-medium flex justify-center items-center"
-  />
-)
+	<DrawerDescription
+		{...props}
+		className="font-medium flex justify-center items-center"
+	/>
+);

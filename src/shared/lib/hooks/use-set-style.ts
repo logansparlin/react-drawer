@@ -1,22 +1,22 @@
-import { type RefObject } from 'react'
+import type { RefObject } from "react";
 
-import { resetStyle, setStyle } from '../helpers'
-import { type Style } from '../types'
+import { resetStyle, setStyle } from "../helpers";
+import type { Style } from "../types";
 
 export const useSetStyle = (ref: RefObject<HTMLElement>) => {
-  const set = (style: Style) => {
-    const el = ref.current
-    if (!el) return
+	const set = (style: Style) => {
+		const el = ref.current;
+		if (!el) return;
 
-    setStyle(el as HTMLElement, style)
-  }
+		setStyle(el as HTMLElement, style);
+	};
 
-  const reset = (prop?: string) => {
-    const el = ref.current
-    if (!el) return
+	const reset = (prop?: string) => {
+		const el = ref.current;
+		if (!el) return;
 
-    resetStyle(el as HTMLElement, prop)
-  }
+		resetStyle(el as HTMLElement, prop);
+	};
 
-  return [set, reset] as const
-}
+	return [set, reset] as const;
+};

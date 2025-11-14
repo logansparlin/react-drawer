@@ -1,1 +1,1 @@
-export * from './ui/snap-areas'
+export * from "./ui/snap-areas";

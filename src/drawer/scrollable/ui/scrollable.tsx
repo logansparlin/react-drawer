@@ -1,130 +1,137 @@
-import React, { forwardRef, useEffect, useRef } from 'react'
+import { forwardRef, useEffect, useRef } from "react";
 
-import { useComposedRefs } from '@radix-ui/react-compose-refs'
+import { useComposedRefs } from "@radix-ui/react-compose-refs";
 
-import { useDrawerContext } from '@/drawer/lib/hooks'
-import { clamp, mergeHandlers } from '@/shared/lib/helpers'
-import { useSetStyle } from '@/shared/lib/hooks'
+import { useDrawerContext } from "@/drawer/lib/hooks";
+import { clamp, mergeHandlers } from "@/shared/lib/helpers";
+import { useSetStyle } from "@/shared/lib/hooks";
 import {
-  type DragEventHandler,
-  Draggable,
-  type DraggableProps
-} from '@/shared/ui/draggable'
+	type DragEventHandler,
+	Draggable,
+	type DraggableProps,
+} from "@/shared/ui/draggable";
 import {
-  getDumpedValue,
-  getUndumpedValue
-} from '@/shared/ui/draggable/lib/helpers'
+	getDumpedValue,
+	getUndumpedValue,
+} from "@/shared/ui/draggable/lib/helpers";
 
-import { getMinConstraint } from '../lib/helpers'
+import { getMinConstraint } from "../lib/helpers";
 
 export interface ScrollableProps extends DraggableProps<number> {}
 
 export const Scrollable = forwardRef<HTMLDivElement, ScrollableProps>(
-  ({ onConstraint, onDragEnd, onPointerDown, ...props }, forwardedRef) => {
-    const {
-      drawerControls,
-      scrollableControls,
-      scrollableRef,
-      snap,
-      snapPoints,
-      onScrollableConstraint
-    } = useDrawerContext()
-    const { y } = scrollableControls
+	({ onConstraint, onDragEnd, onPointerDown, ...props }, forwardedRef) => {
+		const {
+			drawerControls,
+			scrollableControls,
+			scrollableRef,
+			snap,
+			snapPoints,
+			onScrollableConstraint,
+		} = useDrawerContext();
+		const { y } = scrollableControls;
 
-    const animationId = useRef<number | null>(null)
+		const animationId = useRef<number | null>(null);
 
-    const composedRef = useComposedRefs(scrollableRef, forwardedRef)
+		const composedRef = useComposedRefs(scrollableRef, forwardedRef);
 
-    const [setStyle, resetStyle] = useSetStyle(scrollableRef)
+		const [setStyle, resetStyle] = useSetStyle(scrollableRef);
 
-    const max = 0
+		const max = 0;
 
-    useEffect(() => {
-      if (snap === snapPoints[snapPoints.length - 1]) return
+		useEffect(() => {
+			if (snap === snapPoints[snapPoints.length - 1]) return;
 
-      y.set(max)
+			y.set(max);
 
-      drawerControls.unlock()
-      scrollableControls.lock()
-    }, [snap])
+			drawerControls.unlock();
+			scrollableControls.lock();
+		}, [
+			snap,
+			drawerControls.unlock,
+			scrollableControls.lock,
+			snapPoints.length,
+			snapPoints[snapPoints.length - 1],
+			y.set,
+		]);
 
-    useEffect(() => {
-      y.set(max)
-    }, [])
+		useEffect(() => {
+			y.set(max);
+		}, [y.set]);
 
-    const resetTransition = () => resetStyle('transitionDuration')
+		const resetTransition = () => resetStyle("transitionDuration");
 
-    const resetToBounds = () => {
-      const node = scrollableRef.current
-      if (!node) return
-      y.set(clamp(getMinConstraint(node), max, y.get()))
-    }
+		const resetToBounds = () => {
+			const node = scrollableRef.current;
+			if (!node) return;
+			y.set(clamp(getMinConstraint(node), max, y.get()));
+		};
 
-    const animate = (prev: number, cur: number, velocity: number) => {
-      const node = scrollableRef.current
-      if (!node) return
+		const animate = (prev: number, cur: number, velocity: number) => {
+			const node = scrollableRef.current;
+			if (!node) return;
 
-      const time = cur - prev
+			const time = cur - prev;
 
-      const min = getMinConstraint(node)
-      const delta = velocity * time
-      const newUndumpedY = getUndumpedValue(y.get(), min, max) + delta
+			const min = getMinConstraint(node);
+			const delta = velocity * time;
+			const newUndumpedY = getUndumpedValue(y.get(), min, max) + delta;
 
-      y.set(getDumpedValue(newUndumpedY, min, max))
+			y.set(getDumpedValue(newUndumpedY, min, max));
 
-      const acceleration = -0.0015
+			const acceleration = -0.0015;
 
-      const newVelocity =
-        Math.sign(velocity) *
-        Math.max(Math.abs(velocity) + acceleration * time, 0)
+			const newVelocity =
+				Math.sign(velocity) *
+				Math.max(Math.abs(velocity) + acceleration * time, 0);
 
-      const maxDist = Math.abs(velocity) * 100
-      const outOfMax =
-        newUndumpedY - min <= -maxDist || newUndumpedY - max >= maxDist
+			const maxDist = Math.abs(velocity) * 100;
+			const outOfMax =
+				newUndumpedY - min <= -maxDist || newUndumpedY - max >= maxDist;
 
-      if (newVelocity === 0 || outOfMax) {
-        resetTransition()
-        return resetToBounds()
-      }
+			if (newVelocity === 0 || outOfMax) {
+				resetTransition();
+				return resetToBounds();
+			}
 
-      animationId.current = window.requestAnimationFrame((time) =>
-        animate(cur, time, newVelocity)
-      )
-    }
+			animationId.current = window.requestAnimationFrame((time) =>
+				animate(cur, time, newVelocity),
+			);
+		};
 
-    const handleDragEnd: DragEventHandler = (_, { velocity }) => {
-      if (scrollableControls.locked.get()) return resetToBounds()
+		const handleDragEnd: DragEventHandler = (_, { velocity }) => {
+			if (scrollableControls.locked.get()) return resetToBounds();
 
-      setStyle({ transitionDuration: '0s' })
-      animationId.current = window.requestAnimationFrame((time) =>
-        animate(time, time, velocity)
-      )
-    }
+			setStyle({ transitionDuration: "0s" });
+			animationId.current = window.requestAnimationFrame((time) =>
+				animate(time, time, velocity),
+			);
+		};
 
-    const handlePointerDown = () => {
-      if (animationId.current === null) return
+		const handlePointerDown = () => {
+			if (animationId.current === null) return;
 
-      window.cancelAnimationFrame(animationId.current)
-      animationId.current = null
-      resetTransition()
-    }
+			window.cancelAnimationFrame(animationId.current);
+			animationId.current = null;
+			resetTransition();
+		};
 
-    return (
-      <Draggable
-        vladyoslav-drawer-scrollable=""
-        ref={composedRef}
-        dragControls={scrollableControls}
-        constraints={{
-          min: getMinConstraint,
-          max
-        }}
-        onDragEnd={mergeHandlers(handleDragEnd, onDragEnd)}
-        onPointerDown={mergeHandlers(handlePointerDown, onPointerDown)}
-        onConstraint={mergeHandlers(onScrollableConstraint, onConstraint)}
-        {...props}
-      />
-    )
-  }
-)
+		return (
+			<Draggable
+				gv-drawer-scrollable=""
+				ref={composedRef}
+				dragControls={scrollableControls}
+				constraints={{
+					min: getMinConstraint,
+					max,
+				}}
+				onDragEnd={mergeHandlers(handleDragEnd, onDragEnd)}
+				onPointerDown={mergeHandlers(handlePointerDown, onPointerDown)}
+				onConstraint={mergeHandlers(onScrollableConstraint, onConstraint)}
+				{...props}
+			/>
+		);
+	},
+);
 
-Scrollable.displayName = 'Drawer.Scrollable'
+Scrollable.displayName = "Drawer.Scrollable";

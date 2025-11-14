@@ -1,21 +1,21 @@
-# @vladyoslav/drawer
+# @gv/drawer
 
 An unstyled draggable drawer component for React.
 
 Based on [@radix-ui/react-dialog](https://www.radix-ui.com/primitives/docs/components/dialog) and inspired by Emil Kowalski's awesome [Vaul](https://vaul.emilkowal.ski/).
 
-Demo: [vladyoslav-drawer.vercel.app](https://vladyoslav-drawer.vercel.app)
+Demo: [gv-drawer.vercel.app](https://gv-drawer.vercel.app)
 
 ## Documentation
 
-For full documentation, visit [vladyoslav-drawer.vercel.app/docs](https://vladyoslav-drawer.vercel.app/docs).
+For full documentation, visit [gv-drawer.vercel.app/docs](https://gv-drawer.vercel.app/docs).
 
 ### Installation
 
 Install the component from your command line.
 
 ```shell
-npm i @vladyoslav/drawer
+npm i @gv/drawer
 ```
 
 ### Usage
@@ -23,7 +23,7 @@ npm i @vladyoslav/drawer
 Use the drawer in your app.
 
 ```jsx
-import { Drawer } from '@vladyoslav/drawer'
+import { Drawer } from '@gv/drawer'
 
 export const MyComponent = () => (
   <Drawer.Root>
@@ -38,4 +38,4 @@ export const MyComponent = () => (
 
 ### API Reference
 
-To see components props, visit the full [documentation](https://vladyoslav-drawer.vercel.app/docs).
+To see components props, visit the full [documentation](https://gv-drawer.vercel.app/docs).

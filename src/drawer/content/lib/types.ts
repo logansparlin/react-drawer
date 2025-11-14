@@ -1,3 +1,3 @@
-import { type Snap } from '@/drawer/lib/types'
+import type { Snap } from "@/drawer/lib/types";
 
-export type SnapTo = (to: Snap) => void
+export type SnapTo = (to: Snap) => void;

@@ -1,34 +1,34 @@
-import React, { type FC } from 'react'
+import type { FC } from "react";
 
-import { cssToPx } from '@/drawer/lib/helpers'
-import { useDrawerContext } from '@/drawer/lib/hooks'
+import { cssToPx } from "@/drawer/lib/helpers";
+import { useDrawerContext } from "@/drawer/lib/hooks";
 
-import { COLORS } from '../lib/constants'
-import { useMounted } from '../lib/hooks'
+import { COLORS } from "../lib/constants";
+import { useMounted } from "../lib/hooks";
 
 export const Lines: FC = () => {
-  const { snapPoints, dismissible, drawerRef } = useDrawerContext()
+	const { snapPoints, dismissible, drawerRef } = useDrawerContext();
 
-  const mounted = useMounted()
+	const mounted = useMounted();
 
-  if (!mounted) return null
+	if (!mounted) return null;
 
-  const snapLines = (dismissible ? [0, ...snapPoints] : snapPoints).map(
-    (point) => cssToPx(point, drawerRef.current!)
-  )
+	const snapLines = (dismissible ? [0, ...snapPoints] : snapPoints).map(
+		(point) => cssToPx(point, drawerRef.current!),
+	);
 
-  return snapLines.map((line, index) => (
-    <div
-      key={line}
-      vladyoslav-drawer-lines=""
-      style={{
-        left: 0,
-        right: 0,
-        position: 'fixed',
-        borderTop: '1px dashed',
-        borderColor: COLORS[index % COLORS.length],
-        bottom: line
-      }}
-    />
-  ))
-}
+	return snapLines.map((line, index) => (
+		<div
+			key={line}
+			gv-drawer-lines=""
+			style={{
+				left: 0,
+				right: 0,
+				position: "fixed",
+				borderTop: "1px dashed",
+				borderColor: COLORS[index % COLORS.length],
+				bottom: line,
+			}}
+		/>
+	));
+};

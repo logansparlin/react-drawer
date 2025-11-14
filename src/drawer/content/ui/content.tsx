@@ -1,62 +1,62 @@
-'use client'
+"use client";
 
-import React, { forwardRef } from 'react'
+import { forwardRef } from "react";
 
 import {
-  Content as ContentPrimitive,
-  type DialogContentProps as ContentPrimitiveProps
-} from '@radix-ui/react-dialog'
+	Content as ContentPrimitive,
+	type DialogContentProps as ContentPrimitiveProps,
+} from "@radix-ui/react-dialog";
 
-import { useDrawerContext } from '@/drawer/lib/hooks'
+import { useDrawerContext } from "@/drawer/lib/hooks";
 
-import { Sheet, type SheetProps } from './sheet'
+import { Sheet, type SheetProps } from "./sheet";
 
 export interface ContentProps
-  extends Omit<ContentPrimitiveProps, keyof SheetProps>,
-    SheetProps {}
+	extends Omit<ContentPrimitiveProps, keyof SheetProps>,
+		SheetProps {}
 
 export const Content = forwardRef<HTMLDivElement, ContentProps>(
-  (
-    {
-      onOpenAutoFocus,
-      onCloseAutoFocus,
-      onEscapeKeyDown,
-      onPointerDownOutside,
-      onInteractOutside,
-      forceMount,
-      ...props
-    },
-    ref
-  ) => {
-    const { modal, drawerControls, dismissible } = useDrawerContext()
+	(
+		{
+			onOpenAutoFocus,
+			onCloseAutoFocus,
+			onEscapeKeyDown,
+			onPointerDownOutside,
+			onInteractOutside,
+			forceMount,
+			...props
+		},
+		ref,
+	) => {
+		const { modal, drawerControls, dismissible } = useDrawerContext();
 
-    const primitiveProps = {
-      onOpenAutoFocus,
-      onCloseAutoFocus,
-      onPointerDownOutside,
-      forceMount
-    }
+		const primitiveProps = {
+			onOpenAutoFocus,
+			onCloseAutoFocus,
+			onPointerDownOutside,
+			forceMount,
+		};
 
-    return (
-      <ContentPrimitive
-        ref={ref}
-        asChild
-        {...primitiveProps}
-        vladyoslav-drawer=""
-        onEscapeKeyDown={(e) => {
-          if (drawerControls.isDragging.get()) return e.preventDefault()
-          if (!dismissible) e.preventDefault()
-          onEscapeKeyDown?.(e)
-        }}
-        onInteractOutside={(e) => {
-          if (!modal || !dismissible) e.preventDefault()
-          onInteractOutside?.(e)
-        }}
-      >
-        <Sheet {...props} />
-      </ContentPrimitive>
-    )
-  }
-)
+		return (
+			<ContentPrimitive
+				ref={ref}
+				asChild
+				{...primitiveProps}
+				gv-drawer=""
+				onEscapeKeyDown={(e) => {
+					if (drawerControls.isDragging.get()) return e.preventDefault();
+					if (!dismissible) e.preventDefault();
+					onEscapeKeyDown?.(e);
+				}}
+				onInteractOutside={(e) => {
+					if (!modal || !dismissible) e.preventDefault();
+					onInteractOutside?.(e);
+				}}
+			>
+				<Sheet {...props} />
+			</ContentPrimitive>
+		);
+	},
+);
 
-Content.displayName = 'Drawer.Content'
+Content.displayName = "Drawer.Content";

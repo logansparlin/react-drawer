@@ -1,97 +1,97 @@
-'use client'
+"use client";
 
-import React, { forwardRef, useRef } from 'react'
+import { forwardRef, useRef } from "react";
 
-import { useComposedRefs } from '@radix-ui/react-compose-refs'
+import { useComposedRefs } from "@radix-ui/react-compose-refs";
 import {
-  type DialogOverlayProps as OverlayPrimitiveProps,
-  Overlay as RadixOverlayPrimitive
-} from '@radix-ui/react-dialog'
-import { Presence } from '@radix-ui/react-presence'
+	type DialogOverlayProps as OverlayPrimitiveProps,
+	Overlay as RadixOverlayPrimitive,
+} from "@radix-ui/react-dialog";
+import { Presence } from "@radix-ui/react-presence";
 
-import { cssToPx } from '@/drawer/lib/helpers'
-import { useDrawerContext, usePortalContext } from '@/drawer/lib/hooks'
-import { type Snap } from '@/drawer/lib/types'
-import { clamp } from '@/shared/lib/helpers'
-import { useSetStyle, useValueChange } from '@/shared/lib/hooks'
+import { cssToPx } from "@/drawer/lib/helpers";
+import { useDrawerContext, usePortalContext } from "@/drawer/lib/hooks";
+import type { Snap } from "@/drawer/lib/types";
+import { clamp } from "@/shared/lib/helpers";
+import { useSetStyle, useValueChange } from "@/shared/lib/hooks";
 
-import { OverlayPrimitive } from './overlay-primitive'
+import { OverlayPrimitive } from "./overlay-primitive";
 
 interface WithCustomPrimitiveProps {
-  radixPrimitive: false
-  blockInteraction?: boolean
+	radixPrimitive: false;
+	blockInteraction?: boolean;
 }
 
 interface WithRadixPrimitiveProps {
-  radixPrimitive?: boolean
-  blockInteraction?: never
+	radixPrimitive?: boolean;
+	blockInteraction?: never;
 }
 
 export type OverlayProps = OverlayPrimitiveProps &
-  (WithRadixPrimitiveProps | WithCustomPrimitiveProps) & {
-    fadeFrom?: Snap
-    finalOpacity?: number
-  }
+	(WithRadixPrimitiveProps | WithCustomPrimitiveProps) & {
+		fadeFrom?: Snap;
+		finalOpacity?: number;
+	};
 
 export const Overlay = forwardRef<HTMLDivElement, OverlayProps>(
-  (
-    { radixPrimitive = true, fadeFrom = 0, finalOpacity = 0.8, ...props },
-    forwardedRef
-  ) => {
-    const contextForceMount = usePortalContext()
+	(
+		{ radixPrimitive = true, fadeFrom = 0, finalOpacity = 0.8, ...props },
+		forwardedRef,
+	) => {
+		const contextForceMount = usePortalContext();
 
-    const { drawerControls, drawerRef, snapPoints, open } = useDrawerContext()
-    const { forceMount = contextForceMount, ...other } = props
+		const { drawerControls, drawerRef, snapPoints, open } = useDrawerContext();
+		const { forceMount = contextForceMount, ...other } = props;
 
-    const lastPoint = snapPoints[snapPoints.length - 1]
+		const lastPoint = snapPoints[snapPoints.length - 1];
 
-    const ref = useRef<HTMLDivElement>(null)
-    const composedRef = useComposedRefs(ref, forwardedRef)
+		const ref = useRef<HTMLDivElement>(null);
+		const composedRef = useComposedRefs(ref, forwardedRef);
 
-    const [setStyle, resetStyle] = useSetStyle(ref)
+		const [setStyle, resetStyle] = useSetStyle(ref);
 
-    useValueChange(drawerControls.y, (latest) => {
-      const node = drawerRef.current
-      if (!node) return
+		useValueChange(drawerControls.y, (latest) => {
+			const node = drawerRef.current;
+			if (!node) return;
 
-      const y = cssToPx(latest, node)
-      const fadeFromY = cssToPx(fadeFrom, node)
-      const opacity = clamp(
-        0,
-        1,
-        ((-y - fadeFromY) / (cssToPx(lastPoint, node) - fadeFromY)) *
-          finalOpacity
-      )
+			const y = cssToPx(latest, node);
+			const fadeFromY = cssToPx(fadeFrom, node);
+			const opacity = clamp(
+				0,
+				1,
+				((-y - fadeFromY) / (cssToPx(lastPoint, node) - fadeFromY)) *
+					finalOpacity,
+			);
 
-      setStyle({ opacity: opacity.toString() })
-    })
+			setStyle({ opacity: opacity.toString() });
+		});
 
-    useValueChange(drawerControls.isDragging, (latest) => {
-      if (latest) setStyle({ transition: 'none' })
-      else resetStyle('transition')
-    })
+		useValueChange(drawerControls.isDragging, (latest) => {
+			if (latest) setStyle({ transition: "none" });
+			else resetStyle("transition");
+		});
 
-    if (radixPrimitive)
-      return (
-        <RadixOverlayPrimitive
-          vladyoslav-drawer-overlay=""
-          data-testid="overlay"
-          ref={composedRef}
-          {...other}
-        />
-      )
+		if (radixPrimitive)
+			return (
+				<RadixOverlayPrimitive
+					gv-drawer-overlay=""
+					data-testid="overlay"
+					ref={composedRef}
+					{...other}
+				/>
+			);
 
-    return (
-      <Presence present={forceMount || open}>
-        <OverlayPrimitive
-          vladyoslav-drawer-overlay=""
-          data-testid="overlay"
-          ref={composedRef}
-          {...other}
-        />
-      </Presence>
-    )
-  }
-)
+		return (
+			<Presence present={forceMount || open}>
+				<OverlayPrimitive
+					gv-drawer-overlay=""
+					data-testid="overlay"
+					ref={composedRef}
+					{...other}
+				/>
+			</Presence>
+		);
+	},
+);
 
-Overlay.displayName = 'Drawer.Overlay'
+Overlay.displayName = "Drawer.Overlay";
